@@ -1,0 +1,10 @@
+C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\bin\Release\WurmPlayerExporter.exe.config
+C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\bin\Release\WurmPlayerExporter.exe
+C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\bin\Release\WurmPlayerExporter.pdb
+C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\bin\Release\System.Data.SQLite.dll
+C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\bin\Release\System.Data.SQLite.xml
+C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.Form1.resources
+C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.Properties.Resources.resources
+C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.csproj.GenerateResource.Cache
+C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.exe
+C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.pdb
