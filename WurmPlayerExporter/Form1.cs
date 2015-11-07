@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -85,17 +86,62 @@ namespace WurmPlayerExporter
             using (var sqlConn = new SQLiteConnection(a))
             {
                 sqlConn.Open();
-                var command = sqlConn.CreateCommand();
-                command.CommandText = $@"SELECT Id, Owner, Number, Value, Minvalue FROM SKILLS WHERE OWNER = '{player.Key}'";
-                command.CommandType = CommandType.Text;
-                SQLiteDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+                
+                //Skills
+                var command1 = sqlConn.CreateCommand();
+                command1.CommandText = $@"SELECT Id, Owner, Number, Value, Minvalue FROM SKILLS WHERE OWNER = '{player.Key}'";
+                command1.CommandType = CommandType.Text;
+                var rdr1 = command1.ExecuteReader();
+                while (rdr1.Read())
                 {
-                    sb.AppendFormat(
-                        @"INSERT OR REPLACE INTO SKILLS(Id, Owner, Number, Value, Minvalue) VALUES({0}, {1}, {2}, {3}, {4});{5}",
-                        reader["Id"], reader["Owner"], reader["Number"], reader["Value"], reader["Minvalue"],
-                        Environment.NewLine);
+                    sb.AppendFormat(@"INSERT OR REPLACE INTO SKILLS(Id, Owner, Number, Value, Minvalue) VALUES({0}, {1}, {2}, {3}, {4});{5}", rdr1["Id"], rdr1["Owner"], rdr1["Number"], rdr1["Value"], rdr1["Minvalue"], Environment.NewLine);
                 }
+                rdr1.Dispose();
+                
+                //Affinities
+                var command2 = sqlConn.CreateCommand();
+                command2.CommandType = CommandType.Text;
+                command2.CommandText = $@"SELECT WurmID, Skill, Number FROM AFFINITIES WHERE WURMID = '{player.Key}'";
+                var rdr2 = command2.ExecuteReader();
+                while (rdr2.Read())
+                {
+                    sb.AppendFormat(@"INSERT OR REPLACE INTO AFFINITIES(WurmID, Skill, Number) VALUES({0}, {1}, {2});{3}", rdr2["WurmId"], rdr2["Skill"], rdr2["Number"], Environment.NewLine);
+                }
+                rdr2.Dispose();
+
+                //Titles
+                var command3 = sqlConn.CreateCommand();
+                command3.CommandType = CommandType.Text;
+                command3.CommandText = $@"SELECT WurmID, TitleId, TitleName FROM TITLES WHERE WURMID = '{player.Key}'";
+                var rdr3 = command3.ExecuteReader();
+                while (rdr3.Read())
+                {
+                    sb.AppendFormat(@"INSERT OR REPLACE INTO TITLES(WurmID, TitleId, TitleName) VALUES({0}, {1}, '{2}');{3}", rdr3["WurmId"], rdr3["TitleId"], rdr3["TitleName"], Environment.NewLine);
+                }
+                rdr3.Dispose();
+
+                //Achievements
+                var command4 = sqlConn.CreateCommand();
+                command4.CommandType = CommandType.Text;
+                command4.CommandText = $@"SELECT Player, Achievement, Counter, ADate FROM ACHIEVEMENTS WHERE Player = '{player.Key}'";
+                var rdr4 = command4.ExecuteReader();
+                while (rdr4.Read())
+                {
+                    sb.AppendFormat(@"INSERT OR REPLACE INTO ACHIEVEMENTS(Player, Achievement, Counter, ADate) VALUES({0}, {1}, {2}, '{3}');{4}", rdr4["Player"], rdr4["Achievement"], rdr4["Counter"], Convert.ToDateTime(rdr4["ADate"]).ToString("yyyy-MM-dd HH:mm:ss"), Environment.NewLine);
+                }
+                rdr4.Dispose();
+
+                //Religion
+                var command5 = sqlConn.CreateCommand();
+                command5.CommandType = CommandType.Text;
+                command5.CommandText = $@"SELECT Faith, Deity, Alignment, God, Favor FROM Players WHERE WurmId = '{player.Key}'";
+                var rdr5 = command5.ExecuteReader();
+                while (rdr5.Read())
+                {
+                    sb.AppendFormat(@"UPDATE PLAYERS SET Faith = {0}, Deity = {1}, Alignment = {2}, God = {3}, Favor = {4} WHERE WurmId = {5};{6}", rdr5["Faith"], rdr5["Deity"], rdr5["Alignment"], rdr5["God"], rdr5["Favor"], player.Key, Environment.NewLine);
+                }
+                rdr5.Dispose();
+
                 sqlConn.Close();
             }
 

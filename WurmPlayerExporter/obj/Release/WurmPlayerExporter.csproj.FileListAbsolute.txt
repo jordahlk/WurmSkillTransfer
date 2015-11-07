@@ -8,3 +8,4 @@ C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlay
 C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.csproj.GenerateResource.Cache
 C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.exe
 C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.pdb
+C:\Users\Kevin\Documents\Visual Studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.csprojResolveAssemblyReference.cache
