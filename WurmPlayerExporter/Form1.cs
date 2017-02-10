@@ -238,7 +238,7 @@ namespace WurmPlayerExporter
                         stringBuilder.Append(streamReader.ReadToEnd());
 
                         var command = new SQLiteCommand(conn);
-                        command.CommandText = stringBuilder.ToString().Replace(playerId, newId);
+                        command.CommandText = stringBuilder.ToString().Replace(playerId, newId).Replace("'", "''");
                         command.CommandType = CommandType.Text;
                         
                         command.ExecuteNonQuery();
