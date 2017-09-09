@@ -38,17 +38,28 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.lblCharacterName = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label8 = new System.Windows.Forms.Label();
+            this.btnSelectCharacterDump = new System.Windows.Forms.Button();
+            this.btnImportDump = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.btnDumpSelectDB = new System.Windows.Forms.Button();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
+            this.lblDumpPlayerName = new System.Windows.Forms.Label();
             this.Export.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -61,6 +72,7 @@
             // 
             this.Export.Controls.Add(this.tabPage1);
             this.Export.Controls.Add(this.tabPage2);
+            this.Export.Controls.Add(this.tabPage3);
             this.Export.Location = new System.Drawing.Point(12, 12);
             this.Export.Name = "Export";
             this.Export.SelectedIndex = 0;
@@ -85,7 +97,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(42, 93);
+            this.button2.Location = new System.Drawing.Point(42, 90);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 18;
@@ -117,7 +129,7 @@
             // 
             this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(42, 53);
+            this.comboBox1.Location = new System.Drawing.Point(42, 49);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(290, 28);
             this.comboBox1.TabIndex = 14;
@@ -135,7 +147,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(42, 20);
+            this.button1.Location = new System.Drawing.Point(42, 17);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 13;
@@ -145,6 +157,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.lblCharacterName);
             this.tabPage2.Controls.Add(this.button5);
             this.tabPage2.Controls.Add(this.button3);
             this.tabPage2.Controls.Add(this.label4);
@@ -159,9 +172,17 @@
             this.tabPage2.Text = "Import";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // lblCharacterName
+            // 
+            this.lblCharacterName.AutoSize = true;
+            this.lblCharacterName.Location = new System.Drawing.Point(175, 61);
+            this.lblCharacterName.Name = "lblCharacterName";
+            this.lblCharacterName.Size = new System.Drawing.Size(0, 13);
+            this.lblCharacterName.TabIndex = 20;
+            // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(42, 56);
+            this.button5.Location = new System.Drawing.Point(42, 53);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(127, 23);
             this.button5.TabIndex = 19;
@@ -171,7 +192,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(42, 93);
+            this.button3.Location = new System.Drawing.Point(42, 90);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 18;
@@ -211,13 +232,99 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(42, 20);
+            this.button4.Location = new System.Drawing.Point(42, 17);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 13;
             this.button4.Text = "Select DB";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.lblDumpPlayerName);
+            this.tabPage3.Controls.Add(this.label8);
+            this.tabPage3.Controls.Add(this.btnSelectCharacterDump);
+            this.tabPage3.Controls.Add(this.btnImportDump);
+            this.tabPage3.Controls.Add(this.label9);
+            this.tabPage3.Controls.Add(this.label10);
+            this.tabPage3.Controls.Add(this.label7);
+            this.tabPage3.Controls.Add(this.btnDumpSelectDB);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(407, 215);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Import Dump";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(174, 112);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(0, 13);
+            this.label8.TabIndex = 25;
+            // 
+            // btnSelectCharacterDump
+            // 
+            this.btnSelectCharacterDump.Location = new System.Drawing.Point(41, 71);
+            this.btnSelectCharacterDump.Name = "btnSelectCharacterDump";
+            this.btnSelectCharacterDump.Size = new System.Drawing.Size(127, 23);
+            this.btnSelectCharacterDump.TabIndex = 24;
+            this.btnSelectCharacterDump.Text = "Select Character File";
+            this.btnSelectCharacterDump.UseVisualStyleBackColor = true;
+            this.btnSelectCharacterDump.Click += new System.EventHandler(this.btnSelectCharacterDump_Click);
+            // 
+            // btnImportDump
+            // 
+            this.btnImportDump.Location = new System.Drawing.Point(41, 124);
+            this.btnImportDump.Name = "btnImportDump";
+            this.btnImportDump.Size = new System.Drawing.Size(75, 23);
+            this.btnImportDump.TabIndex = 23;
+            this.btnImportDump.Text = "Import";
+            this.btnImportDump.UseVisualStyleBackColor = true;
+            this.btnImportDump.Click += new System.EventHandler(this.btnImportDump_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(15, 124);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(20, 24);
+            this.label9.TabIndex = 22;
+            this.label9.Text = "3";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(15, 71);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(20, 24);
+            this.label10.TabIndex = 21;
+            this.label10.Text = "2";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(15, 18);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(20, 24);
+            this.label7.TabIndex = 17;
+            this.label7.Text = "1";
+            // 
+            // btnDumpSelectDB
+            // 
+            this.btnDumpSelectDB.Location = new System.Drawing.Point(41, 18);
+            this.btnDumpSelectDB.Name = "btnDumpSelectDB";
+            this.btnDumpSelectDB.Size = new System.Drawing.Size(75, 23);
+            this.btnDumpSelectDB.TabIndex = 16;
+            this.btnDumpSelectDB.Text = "Select DB";
+            this.btnDumpSelectDB.UseVisualStyleBackColor = true;
+            this.btnDumpSelectDB.Click += new System.EventHandler(this.btnDumpSelectDB_Click);
             // 
             // openFileDialog2
             // 
@@ -226,6 +333,14 @@
             // openFileDialog3
             // 
             this.openFileDialog3.FileName = "openFileDialog3";
+            // 
+            // lblDumpPlayerName
+            // 
+            this.lblDumpPlayerName.AutoSize = true;
+            this.lblDumpPlayerName.Location = new System.Drawing.Point(174, 76);
+            this.lblDumpPlayerName.Name = "lblDumpPlayerName";
+            this.lblDumpPlayerName.Size = new System.Drawing.Size(0, 13);
+            this.lblDumpPlayerName.TabIndex = 26;
             // 
             // Form1
             // 
@@ -240,6 +355,8 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -264,6 +381,16 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog2;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.OpenFileDialog openFileDialog3;
+        private System.Windows.Forms.Label lblCharacterName;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button btnSelectCharacterDump;
+        private System.Windows.Forms.Button btnImportDump;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnDumpSelectDB;
+        private System.Windows.Forms.Label lblDumpPlayerName;
     }
 }
 

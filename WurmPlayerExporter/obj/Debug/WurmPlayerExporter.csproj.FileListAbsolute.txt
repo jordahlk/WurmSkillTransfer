@@ -15,7 +15,7 @@ C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Debug\WurmPlayerExporter.exe
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Debug\WurmPlayerExporter.pdb
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Debug\System.Data.SQLite.dll
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Debug\System.Data.SQLite.xml
-C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.csprojResolveAssemblyReference.cache
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.Form1.resources
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.Properties.Resources.resources
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.csproj.GenerateResource.Cache
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.csproj.CoreCompileInputs.cache

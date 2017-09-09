@@ -9,3 +9,14 @@ C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlay
 C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.exe
 C:\Users\Kevin\documents\visual studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.pdb
 C:\Users\Kevin\Documents\Visual Studio 2015\Projects\WurmPlayerExporter\WurmPlayerExporter\obj\Release\WurmPlayerExporter.csprojResolveAssemblyReference.cache
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Release\WurmPlayerExporter.exe.config
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Release\WurmPlayerExporter.exe
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Release\WurmPlayerExporter.pdb
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Release\System.Data.SQLite.dll
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Release\System.Data.SQLite.xml
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Release\WurmPlayerExporter.Form1.resources
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Release\WurmPlayerExporter.Properties.Resources.resources
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Release\WurmPlayerExporter.csproj.GenerateResource.Cache
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Release\WurmPlayerExporter.csproj.CoreCompileInputs.cache
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Release\WurmPlayerExporter.exe
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Release\WurmPlayerExporter.pdb

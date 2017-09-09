@@ -32,9 +32,8 @@ namespace WurmPlayerExporter
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
-                InitialDirectory =
-                    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Wurm Unlimited Dedicated Server\\Creative\\Sqlite",
-                Filter = "db files (*.db)|*.db|All files (*.*)|*.*",
+                InitialDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Wurm Unlimited Dedicated Server\\Creative\\Sqlite",
+                Filter = @"db files (*.db)|*.db|All files (*.*)|*.*",
                 FilterIndex = 0,
                 RestoreDirectory = true
             };
@@ -67,15 +66,15 @@ namespace WurmPlayerExporter
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                    MessageBox.Show(@"Error: Could not read file from disk. Original error: " + ex.Message);
                 }
             }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs eventArgs)
         {
-            var cmb = (ComboBox) sender;
-            player = (KeyValuePair<string, string>) cmb.SelectedItem;
+            var cmb = (ComboBox)sender;
+            player = (KeyValuePair<string, string>)cmb.SelectedItem;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -86,7 +85,7 @@ namespace WurmPlayerExporter
             using (var sqlConn = new SQLiteConnection(a))
             {
                 sqlConn.Open();
-                
+
                 //Skills
                 var command1 = sqlConn.CreateCommand();
                 command1.CommandText = $@"SELECT Id, Owner, Number, Value, Minvalue FROM SKILLS WHERE OWNER = '{player.Key}'";
@@ -97,7 +96,7 @@ namespace WurmPlayerExporter
                     sb.AppendFormat(@"INSERT OR REPLACE INTO SKILLS(Id, Owner, Number, Value, Minvalue) VALUES({0}, {1}, {2}, {3}, {4});{5}", rdr1["Id"], rdr1["Owner"], rdr1["Number"], rdr1["Value"], rdr1["Minvalue"], Environment.NewLine);
                 }
                 rdr1.Dispose();
-                
+
                 //Affinities
                 var command2 = sqlConn.CreateCommand();
                 command2.CommandType = CommandType.Text;
@@ -153,26 +152,7 @@ namespace WurmPlayerExporter
 
         private void button4_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog2 = new OpenFileDialog
-            {
-                InitialDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Wurm Unlimited Dedicated Server\\Creative\\Sqlite",
-                Filter = "db files (*.db)|*.db|All files (*.*)|*.*",
-                FilterIndex = 0,
-                RestoreDirectory = true
-            };
-
-
-            if (openFileDialog2.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    destDbFile = openFileDialog2.FileName;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
-                }
-            }
+            SelectDatabase();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -180,13 +160,15 @@ namespace WurmPlayerExporter
             OpenFileDialog openFileDialog3 = new OpenFileDialog
             {
                 InitialDirectory = System.Reflection.Assembly.GetExecutingAssembly().Location,
-                Filter = "txt files (*.txt)|*.txt",
+                Filter = @"txt files (*.txt)|*.txt",
                 RestoreDirectory = true
             };
 
             if (openFileDialog3.ShowDialog() == DialogResult.OK)
             {
                 playerFile = openFileDialog3.FileName;
+                var playerName = playerFile.Substring(playerFile.LastIndexOf('\\') + 1);
+                lblCharacterName.Text = playerName;
             }
         }
 
@@ -194,12 +176,12 @@ namespace WurmPlayerExporter
         {
             if (string.IsNullOrEmpty(destDbFile))
             {
-                MessageBox.Show("Select a destination database file first!");
+                MessageBox.Show(@"Select a destination database file first!");
                 return;
             }
             if (string.IsNullOrEmpty(playerFile))
             {
-                MessageBox.Show("Select a player file first!");
+                MessageBox.Show(@"Select a player file first!");
                 return;
             }
 
@@ -230,17 +212,19 @@ namespace WurmPlayerExporter
 
                         if (string.IsNullOrEmpty(newId))
                         {
-                            MessageBox.Show("Player not found in destination DB, create the character before attempting to import.");
+                            MessageBox.Show(@"Player not found in destination DB, create the character before attempting to import.");
                             return;
                         }
 
                         var stringBuilder = new StringBuilder();
                         stringBuilder.Append(streamReader.ReadToEnd());
 
-                        var command = new SQLiteCommand(conn);
-                        command.CommandText = stringBuilder.ToString().Replace(playerId, newId).Replace("'", "''");
-                        command.CommandType = CommandType.Text;
-                        
+                        var command = new SQLiteCommand(conn)
+                        {
+                            CommandText = stringBuilder.ToString().Replace(playerId, newId).Replace("'", "''"),
+                            CommandType = CommandType.Text
+                        };
+
                         command.ExecuteNonQuery();
 
                         conn.Close();
@@ -249,11 +233,146 @@ namespace WurmPlayerExporter
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading character into db: " + ex.Message);
+                MessageBox.Show(@"Error loading character into db: " + ex.Message);
                 throw;
             }
 
-            MessageBox.Show("Loaded character into db!");
+            MessageBox.Show(@"Loaded character into db!");
+        }
+
+        private void btnDumpSelectDB_Click(object sender, EventArgs e)
+        {
+            SelectDatabase();
+        }
+
+        private void SelectDatabase()
+        {
+            OpenFileDialog openFileDialog2 = new OpenFileDialog
+            {
+                InitialDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Wurm Unlimited Dedicated Server\\Creative\\Sqlite",
+                Filter = @"db files (*.db)|*.db|All files (*.*)|*.*",
+                FilterIndex = 0,
+                RestoreDirectory = true
+            };
+
+
+            if (openFileDialog2.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    destDbFile = openFileDialog2.FileName;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(@"Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+            }
+        }
+
+        private void btnSelectCharacterDump_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog3 = new OpenFileDialog
+            {
+                InitialDirectory = System.Reflection.Assembly.GetExecutingAssembly().Location,
+                Filter = @"txt files (*.txt)|*.txt",
+                RestoreDirectory = true
+            };
+
+            if (openFileDialog3.ShowDialog() == DialogResult.OK)
+            {
+                playerFile = openFileDialog3.FileName;
+                var playerName = playerFile.Substring(playerFile.LastIndexOf('\\') + 1);
+                lblDumpPlayerName.Text = playerName;
+            }
+        }
+
+        private void btnImportDump_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(destDbFile))
+            {
+                MessageBox.Show(@"Select a destination database file first!");
+                return;
+            }
+            if (string.IsNullOrEmpty(playerFile))
+            {
+                MessageBox.Show(@"Select a player file first!");
+                return;
+            }
+
+            try
+            {
+                using (var streamReader = new StreamReader(playerFile))
+                {
+                    using (var conn = new SQLiteConnection($@"Data Source={destDbFile};Version=3;New=False;Compress=True;"))
+                    {
+                        conn.Open();
+                        var cmd = conn.CreateCommand();
+                        var playerName = playerFile.Substring(playerFile.LastIndexOf('\\') + 1);
+                        playerName = playerName.Replace(".txt", "");
+
+                        cmd.CommandText = $@"SELECT WURMID FROM PLAYERS WHERE LOWER(Name) = '{playerName}'";
+                        var rdr = cmd.ExecuteReader();
+                        string newId = string.Empty;
+                        while (rdr.Read())
+                        {
+                            newId = rdr["WurmId"].ToString();
+                        }
+                        if (string.IsNullOrEmpty(newId))
+                        {
+                            MessageBox.Show(@"Player not found in destination DB, create the character before attempting to import.");
+                            return;
+                        }
+
+                        var stringBuilder = new StringBuilder();
+                        stringBuilder.AppendLine($@"DELETE FROM Skills WHERE OWNER = '{newId}';");
+                        string line;
+                        while ((line = streamReader.ReadLine()) != null)
+                        {
+                            if (line.StartsWith("Skills") || line.StartsWith("----") || line.StartsWith("Characteristics") || line.StartsWith("Religion"))
+                                continue;
+
+                            var skillName = line.Substring(0, line.IndexOf(":")).Trim();
+                            var skillPart = line.Substring(line.IndexOf(":") + 2).Trim();
+                            var skillValue = skillPart.Split(' ')[1];
+
+                            if (skillName.ToLower() == "faith")
+                            {
+                                stringBuilder.AppendLine($@"UPDATE PLAYERS SET FAITH = '{skillValue}' WHERE WURMID = '{newId}';");
+                            }
+                            else if (skillName.ToLower() == "favor")
+                            {
+                                stringBuilder.AppendLine($@"UPDATE PLAYERS SET FAVOR = '{skillValue}' WHERE WURMID = '{newId}';");
+                            }
+                            else if (skillName.ToLower() == "alignment")
+                            {
+                                stringBuilder.AppendLine(
+                                    $@"UPDATE PLAYERS SET ALIGNMENT = '{skillValue}' WHERE WURMID = '{newId}';");
+                            }
+                            else
+                            {
+                                var skillId = Skills.SkillDictionary[skillName.ToLower()];
+                                stringBuilder.AppendLine($@"INSERT INTO Skills (Id, Owner, Number, Value, MinValue) VALUES ((SELECT max(id) FROM SKILLS)+1, {newId}, {skillId}, {skillValue}, {skillValue});");
+                            }
+                        }
+
+                        var command = new SQLiteCommand(conn)
+                        {
+                            CommandText = stringBuilder.ToString(),
+                            CommandType = CommandType.Text
+                        };
+
+                        command.ExecuteNonQuery();
+
+                        conn.Close();
+                    }
+                }
+                MessageBox.Show(@"Player imported!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(@"Error loading character into db: " + ex.Message);
+                throw;
+            }
         }
     }
 }
