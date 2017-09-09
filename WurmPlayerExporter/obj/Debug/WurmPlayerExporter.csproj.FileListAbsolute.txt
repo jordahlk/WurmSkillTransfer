@@ -19,3 +19,4 @@ C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.Form1.
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.Properties.Resources.resources
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.csproj.GenerateResource.Cache
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.csproj.CoreCompileInputs.cache
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.csprojResolveAssemblyReference.cache

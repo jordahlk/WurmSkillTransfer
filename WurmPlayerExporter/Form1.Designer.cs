@@ -56,6 +56,7 @@
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
             this.lblDumpPlayerName = new System.Windows.Forms.Label();
+            this.cmbPriest = new System.Windows.Forms.ComboBox();
             this.Export.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -242,6 +243,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.cmbPriest);
             this.tabPage3.Controls.Add(this.lblDumpPlayerName);
             this.tabPage3.Controls.Add(this.label8);
             this.tabPage3.Controls.Add(this.btnSelectCharacterDump);
@@ -342,6 +344,21 @@
             this.lblDumpPlayerName.Size = new System.Drawing.Size(0, 13);
             this.lblDumpPlayerName.TabIndex = 26;
             // 
+            // cmbPriest
+            // 
+            this.cmbPriest.FormattingEnabled = true;
+            this.cmbPriest.Items.AddRange(new object[] {
+            "Not a priest",
+            "Fo",
+            "Magranon",
+            "Vynora",
+            "Libila"});
+            this.cmbPriest.Location = new System.Drawing.Point(41, 97);
+            this.cmbPriest.Name = "cmbPriest";
+            this.cmbPriest.Size = new System.Drawing.Size(121, 21);
+            this.cmbPriest.TabIndex = 27;
+            this.cmbPriest.Text = "Select Priesthood";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -391,6 +408,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnDumpSelectDB;
         private System.Windows.Forms.Label lblDumpPlayerName;
+        private System.Windows.Forms.ComboBox cmbPriest;
     }
 }
 

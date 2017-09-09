@@ -202,7 +202,7 @@ namespace WurmPlayerExporter
                         playerName = playerName.Replace(".txt", "");
                         reader.Close();
 
-                        cmd.CommandText = $@"SELECT WURMID FROM PLAYERS WHERE Name = '{playerName}'";
+                        cmd.CommandText = $@"SELECT WURMID FROM PLAYERS WHERE LOWER(Name) = '{playerName.ToLower()}'";
                         var rdr = cmd.ExecuteReader();
                         string newId = string.Empty;
                         while (rdr.Read())
@@ -310,7 +310,7 @@ namespace WurmPlayerExporter
                         var playerName = playerFile.Substring(playerFile.LastIndexOf('\\') + 1);
                         playerName = playerName.Replace(".txt", "");
 
-                        cmd.CommandText = $@"SELECT WURMID FROM PLAYERS WHERE LOWER(Name) = '{playerName}'";
+                        cmd.CommandText = $@"SELECT WURMID FROM PLAYERS WHERE LOWER(Name) = '{playerName.ToLower()}'";
                         var rdr = cmd.ExecuteReader();
                         string newId = string.Empty;
                         while (rdr.Read())
@@ -352,6 +352,15 @@ namespace WurmPlayerExporter
                             {
                                 var skillId = Skills.SkillDictionary[skillName.ToLower()];
                                 stringBuilder.AppendLine($@"INSERT INTO Skills (Id, Owner, Number, Value, MinValue) VALUES ((SELECT max(id) FROM SKILLS)+1, {newId}, {skillId}, {skillValue}, {skillValue});");
+                            }
+                            switch (cmbPriest.SelectedIndex)
+                            {
+                                case 0:
+                                    stringBuilder.AppendLine($@"UPDATE PLAYERS SET PRIEST = '0', DEITY = '0' WHERE WURMID = {newId};");
+                                    break;
+                                default:
+                                    stringBuilder.AppendLine($@"UPDATE PLAYERS SET PRIEST = '1', DEITY = '{cmbPriest.SelectedIndex}' WHERE WURMID = {newId};");
+                                    break;
                             }
                         }
 
