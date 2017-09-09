@@ -334,6 +334,7 @@ namespace WurmPlayerExporter
                             var skillName = line.Substring(0, line.IndexOf(":")).Trim();
                             var skillPart = line.Substring(line.IndexOf(":") + 2).Trim();
                             var skillValue = skillPart.Split(' ')[1];
+                            var affinityPart = skillPart.Split(' ')[2];
 
                             if (skillName.ToLower() == "faith")
                             {
@@ -352,6 +353,10 @@ namespace WurmPlayerExporter
                             {
                                 var skillId = Skills.SkillDictionary[skillName.ToLower()];
                                 stringBuilder.AppendLine($@"INSERT INTO Skills (Id, Owner, Number, Value, MinValue) VALUES ((SELECT max(id) FROM SKILLS)+1, {newId}, {skillId}, {skillValue}, {skillValue});");
+                                if (affinityPart != "0")
+                                {
+                                    stringBuilder.AppendLine($@"INSERT OR REPLACE INTO AFFINITIES(WurmID, Skill, Number) VALUES({newId}, {skillId}, {affinityPart});");
+                                }
                             }
                             switch (cmbPriest.SelectedIndex)
                             {
