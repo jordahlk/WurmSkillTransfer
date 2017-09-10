@@ -20,3 +20,6 @@ C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.Proper
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.csproj.GenerateResource.Cache
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.csproj.CoreCompileInputs.cache
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Debug\WurmPlayerExporter.csprojResolveAssemblyReference.cache
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Debug\NLog.config
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Debug\NLog.dll
+C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Debug\NLog.xml
