@@ -31,21 +31,26 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.Export = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnSelectItemDB = new System.Windows.Forms.Button();
+            this.cbxExportInventory = new System.Windows.Forms.CheckBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.btnExport = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnSelectDB = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.lblCharacterName = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btnSelectCharacter = new System.Windows.Forms.Button();
+            this.btnImport = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
+            this.btnSelectDBImport = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.cmbPriest = new System.Windows.Forms.ComboBox();
+            this.lblDumpPlayerName = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.btnSelectCharacterDump = new System.Windows.Forms.Button();
             this.btnImportDump = new System.Windows.Forms.Button();
@@ -55,8 +60,7 @@
             this.btnDumpSelectDB = new System.Windows.Forms.Button();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
-            this.lblDumpPlayerName = new System.Windows.Forms.Label();
-            this.cmbPriest = new System.Windows.Forms.ComboBox();
+            this.btnImportItemDb = new System.Windows.Forms.Button();
             this.Export.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -82,12 +86,15 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.button2);
+            this.tabPage1.Controls.Add(this.btnSelectItemDB);
+            this.tabPage1.Controls.Add(this.cbxExportInventory);
+            this.tabPage1.Controls.Add(this.label11);
+            this.tabPage1.Controls.Add(this.btnExport);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.comboBox1);
             this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.button1);
+            this.tabPage1.Controls.Add(this.btnSelectDB);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -96,25 +103,57 @@
             this.tabPage1.Text = "Export";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnSelectItemDB
             // 
-            this.button2.Location = new System.Drawing.Point(42, 90);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "Export";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnSelectItemDB.Location = new System.Drawing.Point(214, 94);
+            this.btnSelectItemDB.Name = "btnSelectItemDB";
+            this.btnSelectItemDB.Size = new System.Drawing.Size(88, 23);
+            this.btnSelectItemDB.TabIndex = 21;
+            this.btnSelectItemDB.Text = "Select Item DB";
+            this.btnSelectItemDB.UseVisualStyleBackColor = true;
+            this.btnSelectItemDB.Visible = false;
+            this.btnSelectItemDB.Click += new System.EventHandler(this.btnSelectItemDB_Click);
+            // 
+            // cbxExportInventory
+            // 
+            this.cbxExportInventory.AutoSize = true;
+            this.cbxExportInventory.Location = new System.Drawing.Point(42, 98);
+            this.cbxExportInventory.Name = "cbxExportInventory";
+            this.cbxExportInventory.Size = new System.Drawing.Size(154, 17);
+            this.cbxExportInventory.TabIndex = 20;
+            this.cbxExportInventory.Text = "Attempt to Export Inventory";
+            this.cbxExportInventory.UseVisualStyleBackColor = true;
+            this.cbxExportInventory.CheckedChanged += new System.EventHandler(this.cbxExportInventory_CheckedChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(16, 91);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(20, 24);
+            this.label11.TabIndex = 19;
+            this.label11.Text = "3";
+            // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(42, 130);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(75, 23);
+            this.btnExport.TabIndex = 18;
+            this.btnExport.Text = "Export";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(16, 90);
+            this.label3.Location = new System.Drawing.Point(16, 130);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(20, 24);
             this.label3.TabIndex = 17;
-            this.label3.Text = "3";
+            this.label3.Text = "4";
             // 
             // label1
             // 
@@ -146,25 +185,26 @@
             this.label2.TabIndex = 16;
             this.label2.Text = "2";
             // 
-            // button1
+            // btnSelectDB
             // 
-            this.button1.Location = new System.Drawing.Point(42, 17);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "Select DB";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnSelectDB.Location = new System.Drawing.Point(42, 17);
+            this.btnSelectDB.Name = "btnSelectDB";
+            this.btnSelectDB.Size = new System.Drawing.Size(95, 23);
+            this.btnSelectDB.TabIndex = 13;
+            this.btnSelectDB.Text = "Select Player DB";
+            this.btnSelectDB.UseVisualStyleBackColor = true;
+            this.btnSelectDB.Click += new System.EventHandler(this.btnSelectDB_Click);
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btnImportItemDb);
             this.tabPage2.Controls.Add(this.lblCharacterName);
-            this.tabPage2.Controls.Add(this.button5);
-            this.tabPage2.Controls.Add(this.button3);
+            this.tabPage2.Controls.Add(this.btnSelectCharacter);
+            this.tabPage2.Controls.Add(this.btnImport);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Controls.Add(this.label6);
-            this.tabPage2.Controls.Add(this.button4);
+            this.tabPage2.Controls.Add(this.btnSelectDBImport);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -181,25 +221,25 @@
             this.lblCharacterName.Size = new System.Drawing.Size(0, 13);
             this.lblCharacterName.TabIndex = 20;
             // 
-            // button5
+            // btnSelectCharacter
             // 
-            this.button5.Location = new System.Drawing.Point(42, 53);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(127, 23);
-            this.button5.TabIndex = 19;
-            this.button5.Text = "Select Character File";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.btnSelectCharacter.Location = new System.Drawing.Point(42, 53);
+            this.btnSelectCharacter.Name = "btnSelectCharacter";
+            this.btnSelectCharacter.Size = new System.Drawing.Size(127, 23);
+            this.btnSelectCharacter.TabIndex = 19;
+            this.btnSelectCharacter.Text = "Select Character File";
+            this.btnSelectCharacter.UseVisualStyleBackColor = true;
+            this.btnSelectCharacter.Click += new System.EventHandler(this.btnSelectCharacter_Click);
             // 
-            // button3
+            // btnImport
             // 
-            this.button3.Location = new System.Drawing.Point(42, 90);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 18;
-            this.button3.Text = "Import";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.btnImport.Location = new System.Drawing.Point(42, 90);
+            this.btnImport.Name = "btnImport";
+            this.btnImport.Size = new System.Drawing.Size(75, 23);
+            this.btnImport.TabIndex = 18;
+            this.btnImport.Text = "Import";
+            this.btnImport.UseVisualStyleBackColor = true;
+            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
             // label4
             // 
@@ -231,15 +271,15 @@
             this.label6.TabIndex = 16;
             this.label6.Text = "2";
             // 
-            // button4
+            // btnSelectDBImport
             // 
-            this.button4.Location = new System.Drawing.Point(42, 17);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 13;
-            this.button4.Text = "Select DB";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.btnSelectDBImport.Location = new System.Drawing.Point(42, 17);
+            this.btnSelectDBImport.Name = "btnSelectDBImport";
+            this.btnSelectDBImport.Size = new System.Drawing.Size(101, 23);
+            this.btnSelectDBImport.TabIndex = 13;
+            this.btnSelectDBImport.Text = "Select Player DB";
+            this.btnSelectDBImport.UseVisualStyleBackColor = true;
+            this.btnSelectDBImport.Click += new System.EventHandler(this.btnSelectDBImport_Click);
             // 
             // tabPage3
             // 
@@ -260,6 +300,29 @@
             this.tabPage3.Text = "Import Dump";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // cmbPriest
+            // 
+            this.cmbPriest.FormattingEnabled = true;
+            this.cmbPriest.Items.AddRange(new object[] {
+            "Not a priest",
+            "Fo",
+            "Magranon",
+            "Vynora",
+            "Libila"});
+            this.cmbPriest.Location = new System.Drawing.Point(41, 97);
+            this.cmbPriest.Name = "cmbPriest";
+            this.cmbPriest.Size = new System.Drawing.Size(121, 21);
+            this.cmbPriest.TabIndex = 27;
+            this.cmbPriest.Text = "Select Priesthood";
+            // 
+            // lblDumpPlayerName
+            // 
+            this.lblDumpPlayerName.AutoSize = true;
+            this.lblDumpPlayerName.Location = new System.Drawing.Point(174, 76);
+            this.lblDumpPlayerName.Name = "lblDumpPlayerName";
+            this.lblDumpPlayerName.Size = new System.Drawing.Size(0, 13);
+            this.lblDumpPlayerName.TabIndex = 26;
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -270,7 +333,7 @@
             // 
             // btnSelectCharacterDump
             // 
-            this.btnSelectCharacterDump.Location = new System.Drawing.Point(41, 71);
+            this.btnSelectCharacterDump.Location = new System.Drawing.Point(41, 60);
             this.btnSelectCharacterDump.Name = "btnSelectCharacterDump";
             this.btnSelectCharacterDump.Size = new System.Drawing.Size(127, 23);
             this.btnSelectCharacterDump.TabIndex = 24;
@@ -302,7 +365,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(15, 71);
+            this.label10.Location = new System.Drawing.Point(15, 60);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(20, 24);
             this.label10.TabIndex = 21;
@@ -322,9 +385,9 @@
             // 
             this.btnDumpSelectDB.Location = new System.Drawing.Point(41, 18);
             this.btnDumpSelectDB.Name = "btnDumpSelectDB";
-            this.btnDumpSelectDB.Size = new System.Drawing.Size(75, 23);
+            this.btnDumpSelectDB.Size = new System.Drawing.Size(127, 23);
             this.btnDumpSelectDB.TabIndex = 16;
-            this.btnDumpSelectDB.Text = "Select DB";
+            this.btnDumpSelectDB.Text = "Select Player DB";
             this.btnDumpSelectDB.UseVisualStyleBackColor = true;
             this.btnDumpSelectDB.Click += new System.EventHandler(this.btnDumpSelectDB_Click);
             // 
@@ -336,28 +399,15 @@
             // 
             this.openFileDialog3.FileName = "openFileDialog3";
             // 
-            // lblDumpPlayerName
+            // btnImportItemDb
             // 
-            this.lblDumpPlayerName.AutoSize = true;
-            this.lblDumpPlayerName.Location = new System.Drawing.Point(174, 76);
-            this.lblDumpPlayerName.Name = "lblDumpPlayerName";
-            this.lblDumpPlayerName.Size = new System.Drawing.Size(0, 13);
-            this.lblDumpPlayerName.TabIndex = 26;
-            // 
-            // cmbPriest
-            // 
-            this.cmbPriest.FormattingEnabled = true;
-            this.cmbPriest.Items.AddRange(new object[] {
-            "Not a priest",
-            "Fo",
-            "Magranon",
-            "Vynora",
-            "Libila"});
-            this.cmbPriest.Location = new System.Drawing.Point(41, 97);
-            this.cmbPriest.Name = "cmbPriest";
-            this.cmbPriest.Size = new System.Drawing.Size(121, 21);
-            this.cmbPriest.TabIndex = 27;
-            this.cmbPriest.Text = "Select Priesthood";
+            this.btnImportItemDb.Location = new System.Drawing.Point(165, 17);
+            this.btnImportItemDb.Name = "btnImportItemDb";
+            this.btnImportItemDb.Size = new System.Drawing.Size(101, 23);
+            this.btnImportItemDb.TabIndex = 21;
+            this.btnImportItemDb.Text = "Select Item DB";
+            this.btnImportItemDb.UseVisualStyleBackColor = true;
+            this.btnImportItemDb.Click += new System.EventHandler(this.btnImportItemDb_Click);
             // 
             // Form1
             // 
@@ -383,20 +433,20 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.TabControl Export;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnSelectDB;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnImport;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnSelectDBImport;
         private System.Windows.Forms.OpenFileDialog openFileDialog2;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button btnSelectCharacter;
         private System.Windows.Forms.OpenFileDialog openFileDialog3;
         private System.Windows.Forms.Label lblCharacterName;
         private System.Windows.Forms.TabPage tabPage3;
@@ -409,6 +459,10 @@
         private System.Windows.Forms.Button btnDumpSelectDB;
         private System.Windows.Forms.Label lblDumpPlayerName;
         private System.Windows.Forms.ComboBox cmbPriest;
+        private System.Windows.Forms.CheckBox cbxExportInventory;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button btnSelectItemDB;
+        private System.Windows.Forms.Button btnImportItemDb;
     }
 }
 

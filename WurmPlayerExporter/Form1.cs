@@ -12,9 +12,11 @@ namespace WurmPlayerExporter
 {
     public partial class Form1 : Form
     {
-        private string sourceDbFile;
+        private string sourcePlayerDbFile;
         private KeyValuePair<string, string> player;
-        private string destDbFile;
+        private string destinationPlayerDBFile;
+        private string sourceItemDbFile;
+        private string destItemDbFile;
         private string playerFile;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -28,7 +30,7 @@ namespace WurmPlayerExporter
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSelectDB_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
@@ -43,9 +45,9 @@ namespace WurmPlayerExporter
             {
                 try
                 {
-                    sourceDbFile = openFileDialog1.FileName;
+                    sourcePlayerDbFile = openFileDialog1.FileName;
                     var players = new Dictionary<string, string>();
-                    string connectionString = $"Data Source={sourceDbFile};Version=3;New=False;Compress=True;";
+                    string connectionString = $"Data Source={sourcePlayerDbFile};Version=3;New=False;Compress=True;";
                     _logger.Debug($"Making connection to {connectionString}");
                     using (var sqlConn = new SQLiteConnection(connectionString))
                     {
@@ -69,7 +71,7 @@ namespace WurmPlayerExporter
                 catch (Exception ex)
                 {
                     _logger.Error($"Exception thrown during player lookup: {ex}");
-                    MessageBox.Show($"Error: Could not read file from disk. Original error: {ex.Message}");
+                    MessageBox.Show($@"Error: Could not read file from disk. Original error: {ex.Message}");
                     throw;
                 }
             }
@@ -81,86 +83,157 @@ namespace WurmPlayerExporter
             player = (KeyValuePair<string, string>)cmb.SelectedItem;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btnExport_Click(object sender, EventArgs e)
         {
             try
             {
                 StringBuilder sb = new StringBuilder();
 
-                string connectionString = $"Data Source={sourceDbFile};Version=3;New=False;Compress=True;";
-                _logger.Debug($"Making connection to {connectionString}");
-                using (var sqlConn = new SQLiteConnection(connectionString))
+                string playerdbConnString = $"Data Source={sourcePlayerDbFile};Version=3;New=False;Compress=True;";
+                _logger.Debug($"Making connection to {playerdbConnString}");
+                using (var sqlConn = new SQLiteConnection(playerdbConnString))
                 {
                     sqlConn.Open();
 
                     //Skills
-                    var command1 = sqlConn.CreateCommand();
-                    command1.CommandText = $"SELECT Id, Owner, Number, Value, Minvalue FROM SKILLS WHERE OWNER = '{player.Key}'";
-                    command1.CommandType = CommandType.Text;
-                    var rdr1 = command1.ExecuteReader();
-                    while (rdr1.Read())
+                    using (var command = sqlConn.CreateCommand())
                     {
-                        var statement = $"INSERT OR REPLACE INTO SKILLS(Id, Owner, Number, Value, Minvalue) VALUES({rdr1["Id"]}, {rdr1["Owner"]}, {rdr1["Number"]}, {rdr1["Value"]}, {rdr1["Minvalue"]});";
-                        _logger.Debug($"Adding to Skills export: {statement}");
-                        sb.AppendLine(statement);
+                        command.CommandText = $"SELECT Id, Owner, Number, Value, Minvalue FROM SKILLS WHERE OWNER = '{player.Key}'";
+                        command.CommandType = CommandType.Text;
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var statement = $"INSERT OR REPLACE INTO SKILLS(Id, Owner, Number, Value, Minvalue) VALUES({reader["Id"]}, {reader["Owner"]}, {reader["Number"]}, {reader["Value"]}, {reader["Minvalue"]});";
+                                _logger.Debug($"Adding to Skills export: {statement}");
+                                sb.AppendLine(statement);
+                            }
+                        }
                     }
-                    rdr1.Dispose();
 
                     //Affinities
-                    var command2 = sqlConn.CreateCommand();
-                    command2.CommandType = CommandType.Text;
-                    command2.CommandText = $"SELECT WurmID, Skill, Number FROM AFFINITIES WHERE WURMID = '{player.Key}'";
-                    var rdr2 = command2.ExecuteReader();
-                    while (rdr2.Read())
+                    using (var command = sqlConn.CreateCommand())
                     {
-                        var statement = $"INSERT OR REPLACE INTO AFFINITIES(WurmID, Skill, Number) VALUES({rdr2["WurmId"]}, {rdr2["Skill"]}, {rdr2["Number"]});";
-                        _logger.Debug($"Adding to Affinities export: {command2.CommandText}");
-                        sb.AppendLine(statement);
+                        sb.AppendLine("***************************AFFINITIES***************************");
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = $"SELECT WurmID, Skill, Number FROM AFFINITIES WHERE WURMID = '{player.Key}'";
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var statement = $"INSERT OR REPLACE INTO AFFINITIES(WurmID, Skill, Number) VALUES({reader["WurmId"]}, {reader["Skill"]}, {reader["Number"]});";
+                                _logger.Debug($"Adding to Affinities export: {command.CommandText}");
+                                sb.AppendLine(statement);
+                            }
+                        }
                     }
-                    rdr2.Dispose();
 
                     //Titles
-                    var command3 = sqlConn.CreateCommand();
-                    command3.CommandType = CommandType.Text;
-                    command3.CommandText = $"SELECT WurmID, TitleId, TitleName FROM TITLES WHERE WURMID = '{player.Key}'";
-                    var rdr3 = command3.ExecuteReader();
-                    while (rdr3.Read())
+                    using (var command = sqlConn.CreateCommand())
                     {
-                        var statement = $"INSERT OR REPLACE INTO TITLES(WurmID, TitleId, TitleName) VALUES({rdr3["WurmId"]}, {rdr3["TitleId"]}, \"{rdr3["TitleName"]}\");";
-                        _logger.Debug($"Adding to Titles export: {statement}");
-                        sb.AppendLine(statement);
+                        sb.AppendLine("***************************TITLES***************************");
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = $"SELECT WurmID, TitleId, TitleName FROM TITLES WHERE WURMID = '{player.Key}'";
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var statement = $"INSERT OR REPLACE INTO TITLES(WurmID, TitleId, TitleName) VALUES({reader["WurmId"]}, {reader["TitleId"]}, \"{reader["TitleName"]}\");";
+                                _logger.Debug($"Adding to Titles export: {statement}");
+                                sb.AppendLine(statement);
+                            }
+                        }
                     }
-                    rdr3.Dispose();
 
                     //Achievements
-                    var command4 = sqlConn.CreateCommand();
-                    command4.CommandType = CommandType.Text;
-                    command4.CommandText = $"SELECT Player, Achievement, Counter, ADate FROM ACHIEVEMENTS WHERE Player = '{player.Key}'";
-                    _logger.Debug($"Adding to Achievements export: {command4.CommandText}");
-                    var rdr4 = command4.ExecuteReader();
-                    while (rdr4.Read())
+                    using (var command = sqlConn.CreateCommand())
                     {
-                        var statement = $"INSERT OR REPLACE INTO ACHIEVEMENTS(Player, Achievement, Counter, ADate) VALUES({rdr4["Player"]}, {rdr4["Achievement"]}, {rdr4["Counter"]}, '{Convert.ToDateTime(rdr4["ADate"]):yyyy-MM-dd HH:mm:ss}');";
-                        _logger.Debug($"Adding to Achievements export: {statement}");
-                        sb.AppendLine(statement);
+                        sb.AppendLine("***************************ACHIEVEMENTS***************************");
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = $"SELECT Player, Achievement, Counter, ADate FROM ACHIEVEMENTS WHERE Player = '{player.Key}'";
+                        _logger.Debug($"Adding to Achievements export: {command.CommandText}");
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var statement = $"INSERT OR REPLACE INTO ACHIEVEMENTS(Player, Achievement, Counter, ADate) VALUES({reader["Player"]}, {reader["Achievement"]}, {reader["Counter"]}, '{Convert.ToDateTime(reader["ADate"]):yyyy-MM-dd HH:mm:ss}');";
+                                _logger.Debug($"Adding to Achievements export: {statement}");
+                                sb.AppendLine(statement);
+                            }
+                        }
                     }
-                    rdr4.Dispose();
 
                     //Religion
-                    var command5 = sqlConn.CreateCommand();
-                    command5.CommandType = CommandType.Text;
-                    command5.CommandText = $"SELECT Faith, Deity, Alignment, God, Favor FROM Players WHERE WurmId = '{player.Key}'";
-                    
-                    var rdr5 = command5.ExecuteReader();
-                    while (rdr5.Read())
+                    using (var command = sqlConn.CreateCommand())
                     {
-                        var statement = $"UPDATE PLAYERS SET Faith = {rdr5["Faith"]}, Deity = {rdr5["Deity"]}, Alignment = {rdr5["Alignment"]}, God = {rdr5["God"]}, Favor = {rdr5["Favor"]} WHERE WurmId = {player.Key};";
-                        _logger.Debug($"Adding to Religion export: {statement}");
-                        sb.AppendLine(statement);
+                        sb.AppendLine("***************************RELIGION***************************");
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = $"SELECT Faith, Deity, Alignment, God, Favor FROM Players WHERE WurmId = '{player.Key}'";
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var statement = $"UPDATE PLAYERS SET Faith = {reader["Faith"]}, Deity = {reader["Deity"]}, Alignment = {reader["Alignment"]}, God = {reader["God"]}, Favor = {reader["Favor"]} WHERE WurmId = {player.Key};";
+                                _logger.Debug($"Adding to Religion export: {statement}");
+                                sb.AppendLine(statement);
+                            }
+                        }
                     }
-                    rdr5.Dispose();
-
                     sqlConn.Close();
+                }
+
+                if (cbxExportInventory.Checked)
+                {
+                    string itemdbConnString = $"Data Source={sourceItemDbFile};Version=3;New=False;Compress=True;";
+                    _logger.Debug($"Making connection to {itemdbConnString}");
+                    using (var sqlConn = new SQLiteConnection(itemdbConnString))
+                    {
+                        sqlConn.Open();
+
+                        //Inventory
+                        sb.AppendLine("***************************INVENTORY***************************");
+                        //Locate player's container "items"
+                        List<string> containerIds = new List<string>();
+                        string inventoryId = "-10";
+                        using (var command = sqlConn.CreateCommand())
+                        {
+                            command.CommandType = CommandType.Text;
+                            command.CommandText = $"SELECT WurmId, Name, ParentId from Items WHERE WurmId IN (SELECT DISTINCT ParentId FROM Items WHERE(POSX IS NULL OR POSX = 0) AND OWNERID = {player.Key})";
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    sb.AppendLine(reader["Name"].ToString() == "inventory" ? $"--PlayerInventoryId:{reader["WurmId"]}" : $"--PlayerContainerId:{reader["WurmId"]}");
+                                    containerIds.Add(reader["WurmId"].ToString());
+                                    //Identify the "Inventory" item for the player
+                                    if (reader["ParentId"].ToString() == "-10")
+                                        inventoryId = reader["WurmId"].ToString();
+                                    _logger.Debug($"Found a player container. Id: {reader["WurmId"]} - Name: {reader["Name"]}");
+                                }
+                            }
+                        }
+
+                        //Locate all of a players items (except for settlement deeds)
+                        using (var command = sqlConn.CreateCommand())
+                        {
+                            command.CommandType = CommandType.Text;
+                            command.CommandText = $"SELECT WurmId, TemplateId, Name, Description, QualityLevel, OriginalQualityLevel, Capacity, ParentID, LastMaintained, CreationDate, CreationState, OwnerId, LastOwnerId, Temperature, ZoneId, Damage, SizeX, SizeY, SizeZ, Weight, Material, LockId, Price, Bless, Enchant, Banked, AuxData, RealTemplate, Color, Female, Mailed, MailTimes, Transferred, Creator, Hidden, Rarity, OnBridge, Settings FROM Items WHERE OwnerId='{player.Key}' AND TemplateId <> '663'";
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    //If this item's parent is not a container or -10, then replace its parent with the inventory
+                                    //This is necessary for worn items like armor, weapons, backpack, toolbelt.  No way I can find to identify the bodypart to attach it to on the other side
+                                    var currentParentId = reader["ParentId"].ToString();
+                                    var parentId = (containerIds.Contains(currentParentId) || currentParentId == "-10") ? currentParentId : inventoryId;
+                                    var statement = $"INSERT INTO Items(WurmId, TemplateId, Name, Description, QualityLevel, OriginalQualityLevel, Capacity, ParentID, LastMaintained, CreationDate, CreationState, OwnerId, LastOwnerId, Temperature, ZoneId, Damage, SizeX, SizeY, SizeZ, Weight, Material, LockId, Price, Bless, Enchant, Banked, AuxData, RealTemplate, Color, Female, Mailed, MailTimes, Transferred, Creator, Hidden, Rarity, OnBridge, Settings) VALUES({reader["WurmId"]}, {reader["TemplateId"]}, \"{reader["Name"]}\", \"{reader["Description"]}\", {reader["QualityLevel"]}, {reader["OriginalQualityLevel"]}, {reader["Capacity"]}, {parentId}, {reader["LastMaintained"]}, {reader["CreationDate"]}, {reader["CreationState"]}, {reader["OwnerId"]}, {reader["LastOwnerId"]}, {reader["Temperature"]}, {reader["ZoneId"]}, {reader["Damage"]}, {reader["SizeX"]}, {reader["SizeY"]}, {reader["SizeZ"]}, {reader["Weight"]}, {reader["Material"]}, {reader["LockId"]}, {reader["Price"]}, {reader["Bless"]}, {reader["Enchant"]}, {reader["Banked"]}, {reader["AuxData"]}, {reader["RealTemplate"]}, {reader["Color"]}, {reader["Female"]}, {reader["Mailed"]}, {reader["MailTimes"]}, {reader["Transferred"]}, \"{reader["Creator"]}\", {reader["Hidden"]}, {reader["Rarity"]}, {reader["OnBridge"]}, {reader["Settings"]});";
+                                    _logger.Debug($"Adding to Inventory export: {statement}");
+                                    sb.AppendLine(statement);
+                                }
+                            }
+                        }
+                        sqlConn.Close();
+                    }
                 }
 
                 StreamWriter writer = new StreamWriter($"{player.Value}.txt");
@@ -168,22 +241,22 @@ namespace WurmPlayerExporter
                 writer.Write(sb.ToString());
                 writer.Dispose();
                 _logger.Info($"Created file {player.Value}");
-                MessageBox.Show($"Created file: {player.Value}.txt");
+                MessageBox.Show($@"Created file: {player.Value}.txt");
             }
             catch (Exception ex)
             {
                 _logger.Error($"Exception thrown during export: {ex}");
-                MessageBox.Show($"Error occurred attempting to export {player.Value}: {ex}");
+                MessageBox.Show($@"Error occurred attempting to export {player.Value}: {ex}");
                 throw;
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void btnSelectDBImport_Click(object sender, EventArgs e)
         {
-            SelectDatabase();
+            SelectDestinationPlayerDatabase();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void btnSelectCharacter_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog3 = new OpenFileDialog
             {
@@ -200,9 +273,9 @@ namespace WurmPlayerExporter
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btnImport_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(destDbFile))
+            if (string.IsNullOrEmpty(destinationPlayerDBFile))
             {
                 MessageBox.Show(@"Select a destination database file first!");
                 return;
@@ -217,49 +290,112 @@ namespace WurmPlayerExporter
             {
                 using (var streamReader = new StreamReader(playerFile))
                 {
-                    using (var conn = new SQLiteConnection($"Data Source={destDbFile};Version=3;New=False;Compress=True;"))
+                    //Get player name and originalID from the txt file
+                    var reader = new StreamReader(playerFile);
+                    var firstLine = reader.ReadLine();
+                    var playerId = firstLine.Split(',')[5].Trim();
+                    _logger.Debug($"Got a player Id of {playerId} from the first line of the file");
+                    var playerName = playerFile.Substring(playerFile.LastIndexOf('\\') + 1);
+                    playerName = playerName.Replace(".txt", "");
+                    _logger.Debug($"Got a player name of {playerName} from the file name");
+                    reader.Close();
+
+                    var playerStringBuilder = new StringBuilder();
+                    var itemStringBuilder = new StringBuilder();
+                    string line;
+                    while ((line = streamReader.ReadLine()) != null)
+                    {
+                        if (line == "***************************INVENTORY***************************")
+                            break;
+                        if (!line.StartsWith("***************************"))
+                            playerStringBuilder.Append(line);
+                    }
+
+                    Int64 newId;
+                    using (var conn = new SQLiteConnection($"Data Source={destinationPlayerDBFile};Version=3;New=False;Compress=True;"))
                     {
                         _logger.Debug($"Opening connection to {conn}");
                         conn.Open();
-                        var cmd = conn.CreateCommand();
-
-                        //Get player name and originalID from the txt file
-                        var reader = new StreamReader(playerFile);
-                        var firstLine = reader.ReadLine();
-                        var playerId = firstLine.Split(',')[5].Trim();
-                        _logger.Debug($"Got a player Id of {playerId} from the first line of the file");
-                        var playerName = playerFile.Substring(playerFile.LastIndexOf('\\') + 1);
-                        playerName = playerName.Replace(".txt", "");
-                        _logger.Debug($"Got a player name of {playerName} from the file name");
-                        reader.Close();
-
-                        cmd.CommandText = $"SELECT WURMID FROM PLAYERS WHERE LOWER(Name) = '{playerName.ToLower()}'";
-                        var rdr = cmd.ExecuteReader();
-                        string newId = string.Empty;
-                        while (rdr.Read())
-                        {
-                            newId = rdr["WurmId"].ToString();
-                        }
-
-                        if (string.IsNullOrEmpty(newId))
-                        {
-                            MessageBox.Show(@"Player not found in destination DB, create the character before attempting to import.");
-                            _logger.Warn($"The player name {playerName} was not found in {destDbFile}");
-                            return;
-                        }
-                        _logger.Debug($"Got a WurmId of {newId} from {destDbFile}");
-
-                        var stringBuilder = new StringBuilder();
-                        stringBuilder.Append(streamReader.ReadToEnd());
-
                         var command = new SQLiteCommand(conn)
                         {
-                            CommandText = stringBuilder.ToString().Replace(playerId, newId),
+                            CommandText = $"SELECT WURMID FROM PLAYERS WHERE LOWER(Name) = '{playerName.ToLower()}'",
                             CommandType = CommandType.Text
                         };
+                        
+                        newId = Convert.ToInt64(command.ExecuteScalar());
+                        
+                        if (newId == 0)
+                        {
+                            MessageBox.Show(@"Player not found in destination DB, create the character before attempting to import.");
+                            _logger.Warn($"The player name {playerName} was not found in {destinationPlayerDBFile}");
+                            return;
+                        }
+                        _logger.Debug($"Got a WurmId of {newId} from {destinationPlayerDBFile}");
 
-                        _logger.Debug($"Sending the following command to DB: {command.CommandText}");
+                        command.CommandText = playerStringBuilder.ToString().Replace(playerId, newId.ToString());
+                        _logger.Debug($"Sending the following command to PlayersDB: {command.CommandText}");
                         command.ExecuteNonQuery();
+
+                        conn.Close();
+                    }
+
+                    using (var conn = new SQLiteConnection($"Data Source={destItemDbFile};Version=3;New=False;Compress=True;"))
+                    {
+                        _logger.Debug($"Opening connection to {conn}");
+                        conn.Open();
+
+                        var itemCommand = new SQLiteCommand(conn)
+                        {
+                            CommandType = CommandType.Text,
+                            CommandText = "SELECT MAX(WurmID) FROM Items"
+                        };
+                        var maxId = Convert.ToInt64(itemCommand.ExecuteScalar());
+                        
+                        itemCommand.CommandText = $"SELECT WurmId FROM Items WHERE Name='inventory' AND OwnerId={newId}";
+                        var newInventoryId = itemCommand.ExecuteScalar().ToString();
+                        _logger.Debug($"Found an inventory Id of {newInventoryId}");
+
+                        string oldInventoryId = string.Empty;
+                        List<string> containerIds = new List<string>();
+                        while ((line = streamReader.ReadLine()) != null)
+                        {
+                            if (!line.StartsWith("--"))
+                            {
+                                var idPart = line.Split(',')[37];
+                                var currentId = idPart.Substring(idPart.IndexOf("(") + 1);
+                                //Replace the Id with MAX(ID)+1 if this isnt a container
+                                if (containerIds.Contains(currentId))
+                                {
+                                    itemStringBuilder.AppendLine(line);
+                                } else if(!line.Contains("\"inventory\","))
+                                {
+                                    maxId++;
+                                    itemStringBuilder.AppendLine(line.Replace(currentId, maxId.ToString()));
+                                }
+                            } else
+                            {
+                                if (line.Contains("PlayerInventoryId"))
+                                {   //Dont add this item to the container list.  Just note the old Id so we can replace it later
+                                    oldInventoryId = line.Substring(line.IndexOf(":") + 1);
+                                } else
+                                {
+                                    containerIds.Add(line.Substring(line.IndexOf(":") + 1));
+                                }
+                            }
+                        }
+                        
+                        for (int i = 1; i <= containerIds.Count; i++)
+                        {
+                            itemStringBuilder.Replace(containerIds[i - 1], (maxId + i).ToString());
+                        }
+
+                        //Replace the old inventory Id with the new one
+                        itemStringBuilder.Replace(oldInventoryId, newInventoryId);
+
+                        itemCommand.CommandText = itemStringBuilder.ToString().Replace(playerId, newId.ToString()).Replace(" ,", " NULL,");
+
+                        _logger.Debug($"Sending the following command to ItemsDB: {itemCommand.CommandText}");
+                        itemCommand.ExecuteNonQuery();
 
                         conn.Close();
                     }
@@ -277,10 +413,10 @@ namespace WurmPlayerExporter
 
         private void btnDumpSelectDB_Click(object sender, EventArgs e)
         {
-            SelectDatabase();
+            SelectDestinationPlayerDatabase();
         }
 
-        private void SelectDatabase()
+        private void SelectDestinationPlayerDatabase()
         {
             OpenFileDialog openFileDialog2 = new OpenFileDialog
             {
@@ -295,7 +431,7 @@ namespace WurmPlayerExporter
             {
                 try
                 {
-                    destDbFile = openFileDialog2.FileName;
+                    destinationPlayerDBFile = openFileDialog2.FileName;
                 }
                 catch (Exception ex)
                 {
@@ -323,7 +459,7 @@ namespace WurmPlayerExporter
 
         private void btnImportDump_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(destDbFile))
+            if (string.IsNullOrEmpty(destinationPlayerDBFile))
             {
                 MessageBox.Show(@"Select a destination database file first!");
                 return;
@@ -338,7 +474,7 @@ namespace WurmPlayerExporter
             {
                 using (var streamReader = new StreamReader(playerFile))
                 {
-                    using (var conn = new SQLiteConnection($"Data Source={destDbFile};Version=3;New=False;Compress=True;"))
+                    using (var conn = new SQLiteConnection($"Data Source={destinationPlayerDBFile};Version=3;New=False;Compress=True;"))
                     {
                         _logger.Debug($"Opening connection to {conn}");
                         conn.Open();
@@ -357,10 +493,10 @@ namespace WurmPlayerExporter
                         if (string.IsNullOrEmpty(newId))
                         {
                             MessageBox.Show(@"Player not found in destination DB, create the character before attempting to import.");
-                            _logger.Warn($"The player name {playerName} was not found in {destDbFile}");
+                            _logger.Warn($"The player name {playerName} was not found in {destinationPlayerDBFile}");
                             return;
                         }
-                        _logger.Debug($"Got a WurmId of {newId} from {destDbFile}");
+                        _logger.Debug($"Got a WurmId of {newId} from {destinationPlayerDBFile}");
 
                         var stringBuilder = new StringBuilder();
                         stringBuilder.AppendLine($"DELETE FROM Skills WHERE OWNER = '{newId}';");
@@ -444,6 +580,59 @@ namespace WurmPlayerExporter
                 _logger.Error($"Exception thrown while importing dump: {ex}");
                 MessageBox.Show($"Error loading character into db {ex.Message}");
                 throw;
+            }
+        }
+
+        private void cbxExportInventory_CheckedChanged(object sender, EventArgs e)
+        {
+            btnSelectItemDB.Visible = cbxExportInventory.Checked;
+        }
+
+        private void btnSelectItemDB_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog2 = new OpenFileDialog
+            {
+                InitialDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Wurm Unlimited Dedicated Server\\Creative\\Sqlite",
+                Filter = @"db files (*.db)|*.db|All files (*.*)|*.*",
+                FilterIndex = 0,
+                RestoreDirectory = true
+            };
+
+
+            if (openFileDialog2.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    sourceItemDbFile = openFileDialog2.FileName;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(@"Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+            }
+        }
+
+        private void btnImportItemDb_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog2 = new OpenFileDialog
+            {
+                InitialDirectory = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Wurm Unlimited Dedicated Server\\Creative\\Sqlite",
+                Filter = @"db files (*.db)|*.db|All files (*.*)|*.*",
+                FilterIndex = 0,
+                RestoreDirectory = true
+            };
+
+
+            if (openFileDialog2.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    destItemDbFile = openFileDialog2.FileName;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(@"Error: Could not read file from disk. Original error: " + ex.Message);
+                }
             }
         }
     }

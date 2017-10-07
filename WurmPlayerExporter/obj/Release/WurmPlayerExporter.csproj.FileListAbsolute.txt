@@ -23,4 +23,3 @@ C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Release\WurmPlayerExporter.pdb
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Release\NLog.config
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Release\NLog.dll
 C:\_git\WurmSkillTransfer\WurmPlayerExporter\bin\Release\NLog.xml
-C:\_git\WurmSkillTransfer\WurmPlayerExporter\obj\Release\WurmPlayerExporter.csprojResolveAssemblyReference.cache
